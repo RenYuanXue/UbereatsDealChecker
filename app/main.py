@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect
+from flask_cors import CORS
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
