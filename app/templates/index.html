@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang = 'en'>
+<head>
+  <meta charset="UTF-8">
+  <title>Ubereats Deal Checker</title>
+</head>
+<body>
+  <h1>Options</h1>
+  <form method = 'POST'>
+    <label for="fname">Address:</label>
+    <input type="text" name="Address" placeholder="Enter your Address ...">
+  <div>
+    <p>Category:</p>
+    <input type="radio" name="Category" value="Deals" Checked>Deals
+    <input type="radio" name="Category" value="Bubble Tea">Bubble Tea
+  </div>
+  <div>
+    <p>Wanted Deals:</p>
+
+    <!-- Need to find a way in JavaScript to find checked value -->
+
+    <input type="radio" name = "Promotion" value='Buy 1, Get 1 Free' Checked>Buy 1 Get 1 Free
+    <!-- comment -->
+    <!-- <input type="radio" name="season" value="spring">Something -->
+    <!-- <input type="radio" name="season" value="summer">Something -->
+    <!-- <input type="radio" name="season" value="autumn">SomethingElse -->
+  </div>
+  <br>
+    <input type='submit'>
+  </form>
+
+  <h3>Found Deals:</h3>
+  <table id="deals_table" class="table table-striped" align="center">
+    <thead>
+      <tr>
+      </tr>
+    </thead>
+    <tbody id="Deals_result" align="center"> </tbody>
+  </table>
+</body>
+</html>
