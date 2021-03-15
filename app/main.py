@@ -37,4 +37,4 @@ def result(input_address, selected_category, selected_promotion):
     return render_template('result.html')
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run()
