@@ -1,1 +1,1 @@
-FLASK_APP=wsgi.py flask run
+FLASK_APP=app/main.py flask run
