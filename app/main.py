@@ -50,7 +50,8 @@ def result(input_address, selected_category, selected_promotion):
         listed_restaurants = get_all_restaurants(driver, input_address, 
                                                  selected_category, selected_promotion)
     except:
-         redirect(url_for('home'))
+        return redirect(url_for('home'))
+
     finally:
         driver.quit()
 
