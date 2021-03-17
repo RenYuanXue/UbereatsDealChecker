@@ -1,9 +1,6 @@
 from lxml import html
 import requests
-if __name__ == '__main__':
-    from restaurant import *
-else:
-    from common.restaurant import *
+from app.restaurant import *
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
