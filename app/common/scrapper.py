@@ -1,3 +1,9 @@
+from lxml import html
+import requests
+if __name__ == '__main__':
+    from restaurant import *
+else:
+    from common.restaurant import *
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -5,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
-def get_all_restaurants(driver, my_location, category = 'Deals'):
+def get_all_restaurants(driver, my_location, category = 'Deals', promotion = 'Buy 1, Get 1 Free'):
     '''
     None = get_to_page(driver, my_location, category = 'Deals')
     
@@ -88,4 +94,25 @@ def get_all_restaurants(driver, my_location, category = 'Deals'):
         
         if RestaurantInfo.is_satisfied(item_info):
             restaurants.append(RestaurantInfo(item_info, link))
+            
+    return restaurants
+
+def get_items(restaurants, selected_promotion):
+    for res in restaurants:
+        current_url = res.link
+        r = requests.get(current_url)
+        tree = html.fromstring(r.content)
+        current_deal = tree.xpath('//*[@id="main-content"]/div[3]/ul/li[1]/h2/span/text()')
+        if current_deal == []:
+            res.promotion_items = {'None Found' : ' '}
+            continue
+        if current_deal[0] == selected_promotion:
+            grid = tree.xpath('//*[@id="main-content"]/div[3]/ul/li[1]/ul')[0]
+            list_of_items = grid.getchildren()
+            for each_item in list_of_items:
+                text = each_item.text_content()
+                price_idx = text.find('$')
+                item = text[:price_idx]
+                price = text[price_idx:]
+                res.promotion_items[item] = price
     return restaurants

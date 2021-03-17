@@ -3,8 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <title>Ubereats Deal Checker</title>
+  <style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+    </style>
 </head>
 <body>
-    <h1>Hi!</h1>>
+  {% block content %}
+    <table>
+    <tr>
+      <th>Restaurant Name</th>
+      <th>Restaurant Link</th>
+      <th>Delivery Fee</th>
+      <th>Delivery Time</th>
+      <th>Applied Promotion</th>
+      <th>Promoted Items</th>
+    </tr>
+    {% for res in listed_restaurants %}
+    <tr>
+      <th>{{res.name}}</th>
+      <th>{{res.link}}</th>
+      <th>{{res.fee}}</th>
+      <th>{{res.time}}</th>
+      <th>{{res.deal}}</th>
+      <th>
+        {% for item in res.promotion_items %}
+          {{item}} {{res.promotion_items[item]}} <br>
+        {% endfor%}
+      </th>
+    </tr>
+    {% endfor %}
+    </table>
+  {% endblock %}
 </body>
 </html>
