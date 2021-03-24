@@ -44,7 +44,7 @@ def result(input_address, selected_category, selected_promotion):
         driver = webdriver.Chrome('C:\WebDriver\chromedriver.exe', options=chrome_options)"""
 
         driver.maximize_window()
-        driver.get('https://www.ubereats.com/')
+        driver.get('https://www.ubereats.com/ca')
 
         listed_restaurants = []
         listed_restaurants = get_all_restaurants(driver, input_address, 
