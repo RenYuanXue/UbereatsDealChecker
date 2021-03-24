@@ -11,6 +11,7 @@ from selenium.webdriver.common.keys import Keys
 from app.scrapper import *
 
 app = Flask(__name__)
+port = int(os.environ.get('PORT', 5000))
 
 @app.route('/')
 def home():
@@ -61,4 +62,4 @@ def result(input_address, selected_category, selected_promotion):
     return render_template('result.html', listed_restaurants = listed_restaurants)
 
 if __name__ == '__main__':
-    app.run(debug = True)
+    app.run(host='0.0.0.0', port=port, debug=True)
