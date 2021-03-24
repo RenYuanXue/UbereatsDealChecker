@@ -34,7 +34,7 @@ def get_all_restaurants(driver, my_location, category = 'Deals', promotion = 'Bu
     # and redirect to the new page.
     actions = ActionChains(driver)
     actions.send_keys_to_element(location_pos, my_location)
-    actions.pause(1)
+    actions.pause(5)
     actions.click(find_food_pos)
     actions.perform()
     
