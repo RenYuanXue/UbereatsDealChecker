@@ -26,7 +26,6 @@
     <table>
     <tr>
       <th>Restaurant Name</th>
-      <th>Restaurant Link</th>
       <th>Delivery Fee</th>
       <th>Delivery Time</th>
       <th>Applied Promotion</th>
@@ -34,14 +33,13 @@
     </tr>
     {% for res in listed_restaurants %}
     <tr>
-      <th>{{res.name}}</th>
-      <th>{{res.link}}</th>
-      <th>{{res.fee}}</th>
-      <th>{{res.time}}</th>
-      <th>{{res.deal}}</th>
+      <th><a href = {{res['link']}} >{{res['name']}}</a></th>
+      <th>{{res['fee']}}</th>
+      <th>{{res['time']}}</th>
+      <th>{{res['deal']}}</th>
       <th>
-        {% for item in res.promotion_items %}
-          {{item}} {{res.promotion_items[item]}} <br>
+        {% for item in res['promotion_items'] %}
+          {{item}} {{res['promotion_items'][item]}} <br>
         {% endfor%}
       </th>
     </tr>

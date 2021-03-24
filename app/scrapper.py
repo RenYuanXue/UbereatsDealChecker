@@ -1,6 +1,3 @@
-from lxml import html
-import requests
-from app.restaurant import *
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -58,14 +55,6 @@ def get_all_restaurants(driver, my_location, category = 'Deals', promotion = 'Bu
         actions.key_down(Keys.ENTER).key_up(Keys.ENTER)
         actions.perform()
     
-    # Wait until all elements are present in the list of restaurants.
-    list_of_restaurants = WebDriverWait(driver, 10).until(
-        EC.presence_of_all_elements_located(
-            (By.XPATH, '//*[@id="main-content"]/div/div/div[2]/div/div[2]')
-        )
-    )
-    list_of_restaurants = list_of_restaurants[0]
-    
     # Use the fact that all restaurants have only one figure to find number of restaurants in the page.
     figures = WebDriverWait(driver, 10).until(
         EC.visibility_of_all_elements_located((By.TAG_NAME, 'figure'))
@@ -89,27 +78,64 @@ def get_all_restaurants(driver, my_location, category = 'Deals', promotion = 'Bu
         link_info = item.find_element_by_tag_name('a')
         link = link_info.get_attribute('href')
         
-        if RestaurantInfo.is_satisfied(item_info):
-            restaurants.append(RestaurantInfo(item_info, link))
+        if rewards(item_info[0], promotion):
+            restaurant_info = {'name': item_info[1], 'deal': item_info[0], 'fee': find_delivery_fee(item_info), 
+                               'time': find_delivery_time(item_info), 'promotion_items': {}, 'link': link}
+            restaurants.append(restaurant_info)
             
     return restaurants
 
-def get_items(restaurants, selected_promotion):
+
+def get_items(driver, restaurants, selected_promotion):
     for res in restaurants:
-        current_url = res.link
-        r = requests.get(current_url)
-        tree = html.fromstring(r.content)
-        current_deal = tree.xpath('//*[@id="main-content"]/div[3]/ul/li[1]/h2/span/text()')
-        if current_deal == []:
-            res.promotion_items = {'None Found' : ' '}
+        current_url = res['link']
+        driver.get(current_url)
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.text_to_be_present_in_element(
+                    (By.XPATH, '//*[@id="main-content"]/div[3]/ul/li[1]/h2/span'
+                ), ' ')
+            )
+            deal_pos = driver.find_element_by_xpath('//*[@id="main-content"]/div[3]/ul/li[1]/h2/span')
+            current_deal = deal_pos.text 
+        except:
+            res['promotion_items'] = {'Found None' : ""}
             continue
-        if current_deal[0] == selected_promotion:
-            grid = tree.xpath('//*[@id="main-content"]/div[3]/ul/li[1]/ul')[0]
-            list_of_items = grid.getchildren()
+        
+        if current_deal == selected_promotion:
+            WebDriverWait(driver, 10).until(
+                EC.text_to_be_present_in_element(
+                    (By.XPATH, '//*[@id="main-content"]/div[3]/ul/li[1]/ul'
+                ), ' ')
+            )
+            grid = driver.find_element_by_xpath('//*[@id="main-content"]/div[3]/ul/li[1]/ul')
+            list_of_items = grid.find_elements_by_tag_name('li')
             for each_item in list_of_items:
-                text = each_item.text_content()
+                text = each_item.text
                 price_idx = text.find('$')
-                item = text[:price_idx]
+                item = text[:price_idx - 1]
                 price = text[price_idx:]
-                res.promotion_items[item] = price
+                res['promotion_items'][item] = price
+
     return restaurants
+
+
+def find_delivery_time(list_of_info):
+    time = 'Not Found'
+    for info in list_of_info:
+        if "min" in info:
+            time = info
+    return time
+
+def find_delivery_fee(list_of_info):
+    fee = 'Not Found'
+    for info in list_of_info:
+        if "Delivery Fee" in info:
+            fee = info
+    return fee
+
+def rewards(current_promotion, target_promotion):
+    if current_promotion == target_promotion:
+        return True
+    else:
+        return False
