@@ -1,1 +1,1 @@
-web: gunicorn -b :$PORT app.main:app
+web: gunicorn -b :$PORT app.main:app --timeout 120
