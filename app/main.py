@@ -51,10 +51,10 @@ def result(input_address, selected_category, selected_promotion):
                                                  selected_category, selected_promotion)
         listed_restaurants = listed_restaurants[:10]
         listed_restaurants = get_items(driver, listed_restaurants, selected_promotion)
-        
-    """except:
+
+        """except:
         if not listed_restaurants:
-            return redirect(url_for('home'))"""
+        return redirect(url_for('home'))"""
 
     finally:
         driver.quit()
