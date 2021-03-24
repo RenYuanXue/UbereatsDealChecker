@@ -34,7 +34,7 @@ def get_all_restaurants(driver, my_location, category = 'Deals', promotion = 'Bu
     # and redirect to the new page.
     actions = ActionChains(driver)
     actions.send_keys_to_element(location_pos, my_location)
-    actions.pause(5)
+    actions.pause(1)
     actions.click(find_food_pos)
     actions.perform()
     
@@ -60,7 +60,7 @@ def get_all_restaurants(driver, my_location, category = 'Deals', promotion = 'Bu
         EC.visibility_of_all_elements_located((By.TAG_NAME, 'figure'))
     )
     
-    num_of_restaurants = len(figures)
+    num_of_restaurants = min(10, len(figures))
     restaurants = []
     
     for i in range(num_of_restaurants):

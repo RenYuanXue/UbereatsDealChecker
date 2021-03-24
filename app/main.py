@@ -29,6 +29,7 @@ def homeRedirect():
 @app.route('/result/<input_address>/<selected_category>/<selected_promotion>')
 def result(input_address, selected_category, selected_promotion):
     try:
+        
         chrome_options = webdriver.ChromeOptions()
         chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
         chrome_options.add_argument('--headless')
@@ -36,12 +37,14 @@ def result(input_address, selected_category, selected_promotion):
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('--disable-dev-shm-usage')
         driver = webdriver.Chrome(executable_path=os.environ.get("CHROMEDRIVER_PATH"), options=chrome_options)
-        
-        """chrome_options = webdriver.ChromeOptions()
+
+        '''
+        chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--disable-gpu')
         chrome_options.add_argument('--no-sandbox')
-        driver = webdriver.Chrome('C:\WebDriver\chromedriver.exe', options=chrome_options)"""
+        driver = webdriver.Chrome('C:\WebDriver\chromedriver.exe', options=chrome_options)
+        '''
 
         driver.maximize_window()
         driver.get('https://www.ubereats.com/ca')
@@ -50,7 +53,7 @@ def result(input_address, selected_category, selected_promotion):
         listed_restaurants = get_all_restaurants(driver, input_address, 
                                                  selected_category, selected_promotion)
         listed_restaurants = listed_restaurants[:10]
-        listed_restaurants = get_items(driver, listed_restaurants, selected_promotion)
+        # listed_restaurants = get_items(driver, listed_restaurants, selected_promotion)
 
         """except:
         if not listed_restaurants:
@@ -64,3 +67,4 @@ def result(input_address, selected_category, selected_promotion):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
+    # app.run(debug = True)
